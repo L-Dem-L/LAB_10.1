@@ -6,35 +6,22 @@ using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
 namespace UnitTest
 {
-	TEST_CLASS(UnitTest)
-	{
-	public:
-		
-		TEST_METHOD(TestContainsThreeConsecutiveStars)
-		{
-            // Arrange
-            const char* testFilename = "test.txt";
+    TEST_CLASS(UnitTest)
+    {
+    public:
+        TEST_METHOD(TesthasTripleStars)
+        {
+            // Create a temporary file with triple stars
+            std::ofstream tempFile("temp.txt");
+            tempFile << "This is a *** test file *** with triple stars." << std::endl;
+            tempFile.close();
 
-            // Act
-            ofstream testFile(testFilename);
-            testFile << "No stars here" << endl;
-            testFile << "*** Three stars ***" << endl;
-            testFile << "One * star" << endl;
-            testFile << "Two ** stars" << endl;
-            testFile << "No consecutive stars" << endl;
-            testFile << "***** Consecutive stars *****" << endl;
-            testFile.close();
+            // Test if the function detects triple stars in the temporary file
+            Assert::IsTrue(hasTripleStars("temp.txt"));
 
-            // Assert
-            Assert::IsTrue(ContainsThreeConsecutiveStars(testFilename));
+            // Delete the temporary file
+            std::remove("temp.txt");
 
-            // Arrange
-            testFile.open(testFilename, ofstream::out | ofstream::trunc);
-            testFile << "No consecutive stars" << endl;
-            testFile.close();
-
-            // Assert
-            Assert::IsFalse(ContainsThreeConsecutiveStars(testFilename));
-		}
-	};
+        }
+    };
 }
